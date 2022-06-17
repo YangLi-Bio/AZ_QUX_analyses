@@ -29,6 +29,7 @@ integrated.mat[1:5, 1:5]
 Seurat3.dir <- paste0(work.dir, "/Seurat3_files/")
 dir.create(Seurat3.dir)
 qs::qsave(integrated.mat, paste0(Seurat3.dir, "Integrated_matrix.qsave"))
+library(data.table)
 
 
 # Save embeddings
@@ -58,7 +59,6 @@ rm(obj.list)
 
 
 # Write csv files
-library(data.table)
 dir.create(paste0(work.dir, "csv_files/"))
 csv.dir <- paste0(work.dir, "csv_files/")
 fwrite(as.data.frame(integrated.mat), file = paste0(csv.dir, "Integrated_matrix.csv"), 
@@ -73,13 +73,13 @@ write.csv(data.frame(Features = rownames(integrated.mat)),
           paste0(csv.dir, "Features_matrix.csv"), quote = F, row.names = F)
 
 
-# Prepare annData for scanpy
-library(anndata)
-library(SeuratDisk)
-rm(ifnb.integrated)
-ad <- AnnData(
-  X = Transpose(integrated.mat), 
-  obs = data.frame(project = barcode.proj, row.names = names(barcode.proj)), 
-  var = data.frame(features = rownames(integrated.mat), 
-                   row.names = rownames(integrated.mat))
-)
+# # Prepare annData for scanpy
+# library(anndata)
+# library(SeuratDisk)
+# rm(ifnb.integrated)
+# ad <- AnnData(
+#   X = Transpose(integrated.mat), 
+#   obs = data.frame(project = barcode.proj, row.names = names(barcode.proj)), 
+#   var = data.frame(features = rownames(integrated.mat), 
+#                    row.names = rownames(integrated.mat))
+# )

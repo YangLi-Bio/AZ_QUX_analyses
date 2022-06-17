@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=Convert_qsave_to_RDS
-#SBATCH --time=2:20:59
-#SBATCH --output=Convert_qsave_to_RDS.out
+#SBATCH --job-name=Get_Monocle_files
+#SBATCH --time=24:20:59
+#SBATCH --output=Get_Monocle_files.out
 #SBATCH --account=PCON0022
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
@@ -16,4 +16,4 @@ cd /fs/ess/PCON0022/liyang/astrazeneca/QUX/
 
 
 module load R/4.1.0-gnu9.1
-Rscript Convert_qsave_to_rds.R
+Rscript Codes/4_Get_Monocle_files.R
