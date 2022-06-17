@@ -52,19 +52,34 @@ barcode.proj <- Reduce("c", lapply(seq_along(obj.list), function(i) {
   projects
 }))
 qs::qsave(barcode.proj, paste0(Seurat3.dir, "Barcodes_project.qsave"))
+# barcode.proj <- qs::qread(paste0(Seurat3.dir, "Barcodes_project.qsave"))
 ncol(ifnb.integrated) == length(barcode.proj)
 rm(obj.list)
 
 
 # Write csv files
-# dir.create(paste0(work.dir, "csv_files/"))
-# csv.dir <- paste0(work.dir, "csv_files/")
-# write.csv(integrated.mat, paste0(csv.dir, "Integrated_matrix.csv"), quote = F)
-# write.csv(umap.mat, paste0(csv.dir, "UMAP_matrix.csv"), quote = F)
-# 
-# barcode.df <- data.frame(Barocdes = names(barcode.proj), Project = barcode.proj)
-# write.csv(barcode.df, paste0(csv.dir, "Barcodes_matrix.csv"), quote = F)
+library(data.table)
+dir.create(paste0(work.dir, "csv_files/"))
+csv.dir <- paste0(work.dir, "csv_files/")
+fwrite(as.data.frame(integrated.mat), file = paste0(csv.dir, "Integrated_matrix.csv"), 
+       quote = F, sep = ",", col.names = F)
+head(umap.mat)
+write.csv(umap.mat, paste0(csv.dir, "UMAP_matrix.csv"), quote = F)
+
+barcode.df <- data.frame(Barocdes = names(barcode.proj), Project = barcode.proj)
+head(barcode.df)
+write.csv(barcode.df, paste0(csv.dir, "Barcodes_matrix.csv"), quote = F, row.names = F)
+write.csv(data.frame(Features = rownames(integrated.mat)), 
+          paste0(csv.dir, "Features_matrix.csv"), quote = F, row.names = F)
 
 
 # Prepare annData for scanpy
 library(anndata)
+library(SeuratDisk)
+rm(ifnb.integrated)
+ad <- AnnData(
+  X = Transpose(integrated.mat), 
+  obs = data.frame(project = barcode.proj, row.names = names(barcode.proj)), 
+  var = data.frame(features = rownames(integrated.mat), 
+                   row.names = rownames(integrated.mat))
+)
