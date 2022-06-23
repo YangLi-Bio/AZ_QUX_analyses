@@ -16,4 +16,4 @@ cd /fs/ess/PCON0022/liyang/astrazeneca/QUX/
 
 
 module load R/4.1.0-gnu9.1
-Rscript /fs/ess/PCON0022/liyang/astrazeneca/QUX/Codes/QUX_scRNA_analyses.R
+Rscript /fs/ess/PCON0022/liyang/astrazeneca/QUX/Codes/1_QUX_scRNA_analyses.R

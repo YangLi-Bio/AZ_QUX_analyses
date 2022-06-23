@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=Run_Generate_annData
-#SBATCH --time=5:20:59
+#SBATCH --time=12:20:59
 #SBATCH --output=Run_Generate_annData.out
 #SBATCH --account=PCON0022
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
-#SBATCH --mem=500GB
+#SBATCH --mem=300GB
 #SBATCH --gpus-per-node=1
 
 

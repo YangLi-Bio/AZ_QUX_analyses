@@ -10,6 +10,8 @@
 
 # Parameters
 work.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/20220524_DITQUX_145_INSERM_Raw/"
+R.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/R_files/"
+out.dir <- "/fs/ess/scratch/PCON0022/liyang/AstraZeneca/QUX/Rfiles/"
 library(Seurat)
 
 
@@ -86,20 +88,45 @@ library(Seurat)
 # # qs::qsave(immune.combined.sct, paste0(work.dir, "Integrated_object.qsave"))
 
 
-# Downstream analyses
-ifnb.integrated <- qs::qread(paste0(work.dir, "rPCA_integrated_object.qsave"))
-ifnb.integrated <- ScaleData(ifnb.integrated, verbose = FALSE)
-ifnb.integrated <- RunPCA(ifnb.integrated, verbose = FALSE)
-ifnb.integrated <- RunUMAP(ifnb.integrated, dims = 1:30)
-qs::qsave(ifnb.integrated, paste0(work.dir, "PCA_UMAP_rPCA_integrated_object.qsave"))
-work.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/20220524_DITQUX_145_INSERM_Raw/"
-ifnb.integrated <- qs::qread(paste0(work.dir, "PCA_UMAP_rPCA_integrated_object.qsave"))
+# # Downstream analyses
+# ifnb.integrated <- qs::qread(paste0(work.dir, "rPCA_integrated_object.qsave"))
+# ifnb.integrated <- ScaleData(ifnb.integrated, verbose = FALSE)
+# ifnb.integrated <- RunPCA(ifnb.integrated, verbose = FALSE)
+# ifnb.integrated <- RunUMAP(ifnb.integrated, dims = 1:30)
+# qs::qsave(ifnb.integrated, paste0(work.dir, "PCA_UMAP_rPCA_integrated_object.qsave"))
+# work.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/20220524_DITQUX_145_INSERM_Raw/"
+# ifnb.integrated <- qs::qread(paste0(work.dir, "PCA_UMAP_rPCA_integrated_object.qsave"))
 
 
 # p1 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "stim")
 # p2 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "seurat_annotations", label = TRUE,
 #               repel = TRUE)
 # p1 + p2
+
+
+# # Unsupervised clustering
+# immune.combined <- qs::qread(paste0(work.dir, "PCA_UMAP_rPCA_integrated_object.qsave"))
+# 
+# # specify that we will perform downstream analysis on the corrected data note that the
+# # original unmodified data still resides in the 'RNA' assay
+# DefaultAssay(immune.combined) <- "integrated"
+# immune.combined <- FindNeighbors(immune.combined, reduction = "pca", dims = 1:30)
+# immune.combined <- FindClusters(immune.combined, resolution = 0.5)
+# qs::qsave(immune.combined, paste0(out.dir, "Cell_clusters_res_0.5.qsave"))
+
+
+# Marker prediction
+pbmc <- qs::qread(paste0(out.dir, "Cell_clusters_res_0.5.qsave")) # 35 clusters are identified
+DefaultAssay(pbmc) <- "RNA"
+Idents(pbmc) <- pbmc$seurat_clusters
+table(Idents(pbmc))
+
+# find markers for every cluster compared to all remaining cells, report only the positive
+# ones
+library(dplyr)
+pbmc.markers <- FindAllMarkers(pbmc, only.pos = F)
+dim(pbmc.markers)
+qs::qsave(pbmc.markers, paste0(out.dir, "Cell_cluster_markers.qsave"))
 
 
 # Session information

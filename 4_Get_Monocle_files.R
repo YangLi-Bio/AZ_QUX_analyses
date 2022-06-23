@@ -20,13 +20,13 @@ ifnb.integrated <- AddMetaData(ifnb.integrated, metadata = barcode.proj, col.nam
 # Get Monocle data
 library(monocle3)
 library(SeuratWrappers)
-DefaultAssay(ifnb.integrated) <- "integrated"
+DefaultAssay(ifnb.integrated) <- "RNA" # integrated
 cds <- as.cell_data_set(ifnb.integrated)
 dim(cds)
-monocle.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/Monocle_dir/"
+monocle.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/Monocle_RNA_dir/"
 dir.create(monocle.dir)
 library(Matrix)
-qs::qsave(cds, paste0(monocle.dir, "cds.qsave"))
+qs::qsave(cds, paste0(monocle.dir, "cds_RNA.qsave"))
 
 writeMM(exprs(cds), paste0(monocle.dir, "matrix.mtx"))
 
