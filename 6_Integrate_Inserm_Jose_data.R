@@ -19,6 +19,8 @@ R.dir <- "/fs/ess/scratch/PCON0022/liyang/AstraZeneca/QUX/Rfiles/"
 Inserm.file <- "Cell_clusters_res_0.5.qsave"
 Jose.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/Filtered_data/Jose_COPD/"
 
+source(paste0(code.dir, "transcriptome_tools.R"))
+
 
 # # Load Jose's data
 # dir.list <- list.dirs(path = Jose.dir)
@@ -38,7 +40,6 @@ Jose.dir <- "/fs/ess/PCON0022/liyang/astrazeneca/QUX/Filtered_data/Jose_COPD/"
 # 
 # 
 # # Integrate Jose's data
-# source(paste0(code.dir, "transcriptome_tools.R"))
 # Jose.integrated <- integrate_scRNA(ifnb.list = obj.list, name.list = names)
 # qs::qsave(Jose.integrated, paste0(R.dir, "Jose_integrated.qsave"))
 
