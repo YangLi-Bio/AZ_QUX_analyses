@@ -12,7 +12,7 @@ library(Seurat)
 library(dplyr)
 library(future)
 R.dir <- "/fs/ess/scratch/PCON0022/liyang/AstraZeneca/QUX/Rfiles/"
-integrated.file <- "Inserm_Jose_integrated_cluster_0.5.qsave"
+integrated.file <- "Obj_Inserm_Jose_2batches.qsave"
 
 
 # # Load the Seurat object
@@ -61,7 +61,7 @@ integrated.file <- "Inserm_Jose_integrated_cluster_0.5.qsave"
   
 
 # DEG analysis
-integrated <- qs::qread(paste0(R.dir, "Inserm_Jose_integrated_add_sample_IDs.qsave"))
+integrated <- qs::qread(paste0(R.dir, integrated.file))
 DefaultAssay(integrated) <- "RNA"
 Idents(integrated) <- integrated$seurat_clusters
 table(Idents(integrated))
@@ -69,7 +69,7 @@ plan("multisession", workers = 4)
 options(future.globals.maxSize = 8000 * 1024^2)
 integrated.marmers <- FindAllMarkers(integrated, only.pos = F)
 dim(integrated.marmers)
-qs::qsave(integrated.marmers, paste0(R.dir, "Inserm_Jose_integrated_markers.qsave"))
+qs::qsave(integrated.marmers, paste0(R.dir, "Inserm_Jose_23samples_markers.qsave"))
 
 
 # Session information
